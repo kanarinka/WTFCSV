@@ -4,61 +4,71 @@
 
 	<section id="portfolio" style="margin-top:42px">
 			<div class="container">
-				<div class="row">
-						<div class="col-lg-12 text-center">
-							<h3>Paste in some text or upload a file</h3>
-							<h5>We'll tell you the most common words and phrases used</h5>
+				<div class="row" >
+						<div class="col-lg-12 text-center" style="margin:20px 0">
+							<h3>WTFcsv tells you what the f*&% is going on with your CSV file</h3>
+							<h5>Upload a CSV file, link to one on the web or paste in comma-separated values.</h5>
 							<hr class="star-primary">
 						</div>
 					</div>
-					<form action="/#results" enctype="multipart/form-data" method="POST">
-					<div class="row">
-							<div class="col-md-5">
-										<div class="form-group">
-											<textarea class="form-control" rows="8" id="bagOfWords" name="bagOfWords">I am Sam
-Sam I am
-That Sam-I-am!
-That Sam-I-am!
-I do not like that Sam-I-am!
-Do you like 
-green eggs and ham?
-I do not like them, Sam-I-am.
-I do not like
-green eggs and ham.
-Would you like them 
-here or there?
-I would not like them
-here or there.
-I would not like them anywhere.</textarea>
-									</div>
-						</div>
-						<div class="col-md-2 text-center">
-							<h3>OR</h3>
-						</div>
-						<div class="col-md-5">
-							<div class="form-group">
-								<span class="btn btn-default btn-lg btn-file">
-									Choose .TXT File<input type="file" id="fileOfWords" name="fileOfWords">
-								</span>
+					
+					<ul class="nav nav-tabs nav-justified">
+					  <li role="presentation"><a id="tab-paste" href="#paste" data-toggle="tab"><span class="glyphicon glyphicon-link" aria-hidden="true"></span>Paste CSV text</a></li>
+					  <li role="presentation"><a id="tab-upload-file" href="#upload-file" data-toggle="tab"><span class="glyphicon glyphicon-upload" aria-hidden="true"></span> Upload CSV</a></li>
+					  <li role="presentation"><a id="tab-link-file" href="#link-file" data-toggle="tab"><span class="glyphicon glyphicon-link" aria-hidden="true"></span>Link to CSV</a></li>
+					</ul>
+					<div class="tab-content">
+					  <div id="paste" class="tab-pane fade in active">
+					  		<form action="from-text" method="POST">
+						    <div class="form-group#results">
+									<textarea class="form-control" rows="8" id="csvText" name="csvText">
+name, shirt_color, siblings
+Rahul, blue, 1
+Catherine, red, 2
+									</textarea>
 							</div>
-						</div>
+							<div>
+								<button type="submit" class="btn btn-success btn-lg pull-right" style="margin-top:20px">Submit</button>
+							</div>
+							</form>
+					  </div>
+					  <div id="upload-file" class="tab-pane fade">
+					  	<form action="from-file#results" enctype="multipart/form-data" method="POST">
+					    <span class="btn btn-default btn btn-file">
+									Choose .CSV File<input type="file" id="csvFile" name="csvFile">
+								</span>
+					    	<div>
+								<button type="submit" class="btn btn-success btn-lg pull-right" style="margin-top:20px">Submit</button>
+							</div>
+						</form>
+					  </div>
+					  <div id="link-file" class="tab-pane fade">
+					    <form action="from-url#results" method="POST">
+					    	<div class="form-group">
+							    
+							    <input type="text" class="form-control" id="csvURL" name="csvURL" placeholder="Paste the URL to the CSV file">
+							  </div>
+					    	<div>
+								<button type="submit" class="btn btn-success btn-lg pull-right" style="margin-top:20px">Submit</button>
+							</div>
+						</form>
+					  </div>
 					</div>
+					
+					<!--
+					error 
+					csvinfo
 					<div class="row">
 						<div class="col-lg-12 text-center">
 							[ <a href="#" onclick="$('#advancedOptions').slideToggle();return false;">advanced options</a> ]
 							<div id="advancedOptions" style="display:none">
 								<div class="checkbox">
 									<label>
-										<input type="checkbox" checked name="removeStopWords"> Ignore common words
-										<span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="right" title="Check this to ignore words like 'a' or 'the'. Uncheck if you want to count those types of words."></span>
+										<input type="checkbox" checked name="headerRow"> First row is header row
+										<span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="right" title="Check this if your CSV has a header row with column names. Uncheck this if there is no header row."></span>
 									</label>
 								</div>
-								<div class="checkbox">
-									<label>
-										<input type="checkbox" checked name="ignoreCase"> Ignore case
-										<span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="right" title="Check this to count things like 'hello' and 'Hello' as the same word. Uncheck if you want to count them as separate words."></span>
-									</label>
-								</div>
+								
 							</div>
 						</div>
 					</div>
@@ -68,7 +78,7 @@ I would not like them anywhere.</textarea>
 								<button type="submit" class="btn btn-success btn-lg" style="margin-top:20px">Submit</button>
 							</div>
 						</div>
-					</div>
+					</div>-->
 					</form>
 			</div>
 	</section>
@@ -89,7 +99,7 @@ I would not like them anywhere.</textarea>
 		</section>
 	{% endif %}
 
-	{% if word_counts %}
+	{% if csv_info %}
 
 		<section id="results">
 			<div class="container">
@@ -100,42 +110,7 @@ I would not like them anywhere.</textarea>
 					</div>
 				</div>
 				<div class="row">
-
-					<div class="col-sm-4" id="wordFreq">
-						<h4>Top Words 
-							<a href="/download-csv/{{ csv_file_names['words'] }}" title="Download"><span class="glyphicon glyphicon-download" aria-hidden="true"></span></a>
-						</h4>
-						<table class="table table-striped">
-							<tr><th>Frequency</th><th>Word</th></tr>
-							{% for word in word_counts %}
-								<tr><td>{{ word[1] }}</td><td>{{ word[0] }}</td></tr>
-							{% endfor %}
-						</table>
-					</div>
-
-					<div class="col-sm-4" id="biGrams">
-						<h4>Top 2-Word Phrases 
-							<a href="/download-csv/{{ csv_file_names['bigrams'] }}" title="Download"><span class="glyphicon glyphicon-download" aria-hidden="true"></span></a>
-						</h4>
-						<table class="table table-striped">
-							<tr><th>Frequency</th><th>Phrase</th></tr>
-							{% for bigram in bigram_counts %}
-								<tr><td>{{ bigram[1] }}</td><td>{{ " ".join(bigram[0]) }}</td></tr>
-							{% endfor %}
-						</table>
-					</div>
-
-					<div class="col-sm-4" id="triGrams">
-						<h4>Top 3-Word Phrases
-							<a href="/download-csv/{{ csv_file_names['trigrams'] }}" title="Download"><span class="glyphicon glyphicon-download" aria-hidden="true"></span></a>
-						</h4>
-						<table class="table table-striped">
-							<tr><th>Frequency</th><th>Phrase</th></tr>
-							{% for trigram in trigram_counts %}
-								<tr><td>{{ trigram[1] }}</td><td>{{ " ".join(trigram[0]) }}</td></tr>
-							{% endfor %}
-						</table>
-					</div>
+					{{ csv_info }}
 				</div>
 			</div>
 		</section>
@@ -146,6 +121,9 @@ I would not like them anywhere.</textarea>
 
 {% block page_scripts %}
 <script type="text/javascript">
+$(function(){
+	$('#tab-{{tab}}').tab('show');
+});
 //Javascript
 </script>
 {% endblock %}

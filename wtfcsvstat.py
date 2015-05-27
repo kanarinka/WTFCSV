@@ -18,6 +18,14 @@ MAX_FREQ = 5
 OPERATIONS =('min', 'max', 'sum', 'mean', 'median', 'stdev', 'nulls', 'unique', 'freq', 'len')
 
 '''
+Public API: call this to get results!
+'''
+def get_summary(input_path, has_header_row=True, encoding='utf-8'):
+    wtfcsvstat = WTFCSVStat(input_path, has_header_row, encoding)
+    results = wtfcsvstat.get_summary()
+    return results
+
+'''
 A hacked-up version of after CSVState
 '''
 class WTFCSVStat():

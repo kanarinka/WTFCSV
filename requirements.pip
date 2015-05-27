@@ -1,4 +1,4 @@
-nltk
 flask
 flask-uploads
 unicodecsv
+csvkit

@@ -1,3 +1,7 @@
+body{
+    font-size:18px;
+}
+
 .btn-file {
     position: relative;
     overflow: hidden;
@@ -25,4 +29,7 @@
     font-size: 30px;
     padding-left: 21px;
     padding-top: 3px;
+}
+.tab-content{
+    padding-top:30px;
 }
