@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Word Counter</title>
+
+  <!-- Bootstrap Core CSS - Uses Bootswatch Flatly Theme: http://bootswatch.com/flatly/ -->
+  <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link href="/static/css/freelancer.css" rel="stylesheet">
+
+  <link href="/static/css/wordcounter.css" rel="stylesheet">
+
+  <!-- Custom Fonts -->
+  <link href="/static/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+</head>
+<body id="page-top" class="index">
+ <!-- Navigation -->
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header page-scroll">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#page-top">Word Counter</a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav navbar-right">
+          <li class="hidden">
+            <a href="#page-top"></a>
+          </li>
+          <li class="page-scroll">
+            <a href="#about">About</a>
+          </li>
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
+  </nav>
+  
+{% block content %}
+  {{ content | safe }}
+{% endblock %}
+
+  <!-- About Section -->
+  <section class="success" id="about">
+      <div class="container">
+          <div class="row">
+              <div class="col-md-12 text-center">
+                  <h2>About</h2>
+                  <hr class="star-light">
+              </div>
+          </div>
+          <div class="row">
+	           <div class="col-md-6">
+								<h3>Scratching an Itch</h3>
+	            	<p>
+	            	This is a simple webpage that helps you count words, 2-word phrases (bigrams) and 3-word phrases (trigrams) in plain text. We created it to support some activities we do in our data visualization and storytelling classrooms. In our classes we introduce non-programmers to data analysis and storytelling. We want to help unlock the power of digital tools for everyone.
+	            	</p>
+	          </div>
+            <div class="col-md-6">
+								<h3>Empowering Everyone</h3>
+	            	<p>
+	            	There are a number of computer-assisted data analysis techniques like this that are readily available to programmers. Some of these are even just one line of code, but that one line is incomprehensible if you don't know how to program. We built this site to help bridge that gap, so non-programmers can take advantage of these capabilities.
+	            	</p>
+            </div>
+          </div>
+      </div>
+  </section>
+
+  <footer class="text-center" id="details">
+    <div class="footer-above">
+      <div class="container">
+        <div class="row">
+          <div class="footer-col col-md-4">
+            <h3>Help!</h3>
+            <p>Having problems? <br/>Tweet us: <a href="https://twitter.com/@rahulbot">@rahulbot</a> 
+               or <a href="https://twitter.com/@kanarinka">@kanarinka</a>
+            </p>
+            <p>
+               You can also log bugs on our <a href="https://github.com/c4fcm/Word-Counter/issues">Github issues page</a>.
+            </p>
+          </div>
+					<div class="footer-col col-md-4">
+            <h3>Privacy</h3>
+            <p>
+            We take your privacy seriously. This site uses https for more secure transfer of your data. We don't log or archive the text you upload.  We delete your uploaded file as soon as we have analyzed it.  We won't ever use the aggregate results of analysis either.  We do log that you visited, to see how popular we are.
+            </p>
+          </div>
+          <div class="footer-col col-md-4">
+            <h3>Open Source</h3>
+            <p>
+            We built this using a number of free tools, so this is also open-source. 
+            You can download and change this however you want at our <a href="https://github.com/c4fcm/Word-Counter/">Github repository</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-below">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            created by:
+            <br/>
+            Catherine D'Ignazio ( <a href="http://engagementgamelab.org/">Emerson Engagement Lab</a> ) 
+            <br />
+            Rahul Bhargava ( <a href="http://civic.mit.edu">MIT Center for Civic Media</a> )
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+<script type="text/javascript" src="/static/js/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+</script>
+ <!-- Plugin JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+<script src="/static/js/classie.js"></script>
+<script src="/static/js/cbpAnimatedHeader.js"></script>
+
+<script src="/static/js/freelancer.js"></script>
+
+{% block page_scripts %}
+{% endblock %}
+
+</body>
+
+</html>

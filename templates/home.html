@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+	<section id="portfolio" style="margin-top:42px">
+			<div class="container">
+				<div class="row">
+						<div class="col-lg-12 text-center">
+							<h3>Paste in some text or upload a file</h3>
+							<h5>We'll tell you the most common words and phrases used</h5>
+							<hr class="star-primary">
+						</div>
+					</div>
+					<form action="/#results" enctype="multipart/form-data" method="POST">
+					<div class="row">
+							<div class="col-md-5">
+										<div class="form-group">
+											<textarea class="form-control" rows="8" id="bagOfWords" name="bagOfWords">I am Sam
+Sam I am
+That Sam-I-am!
+That Sam-I-am!
+I do not like that Sam-I-am!
+Do you like 
+green eggs and ham?
+I do not like them, Sam-I-am.
+I do not like
+green eggs and ham.
+Would you like them 
+here or there?
+I would not like them
+here or there.
+I would not like them anywhere.</textarea>
+									</div>
+						</div>
+						<div class="col-md-2 text-center">
+							<h3>OR</h3>
+						</div>
+						<div class="col-md-5">
+							<div class="form-group">
+								<span class="btn btn-default btn-lg btn-file">
+									Choose .TXT File<input type="file" id="fileOfWords" name="fileOfWords">
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-12 text-center">
+							[ <a href="#" onclick="$('#advancedOptions').slideToggle();return false;">advanced options</a> ]
+							<div id="advancedOptions" style="display:none">
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" checked name="removeStopWords"> Ignore common words
+										<span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="right" title="Check this to ignore words like 'a' or 'the'. Uncheck if you want to count those types of words."></span>
+									</label>
+								</div>
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" checked name="ignoreCase"> Ignore case
+										<span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="right" title="Check this to count things like 'hello' and 'Hello' as the same word. Uncheck if you want to count them as separate words."></span>
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-12 text-center">
+							<div>
+								<button type="submit" class="btn btn-success btn-lg" style="margin-top:20px">Submit</button>
+							</div>
+						</div>
+					</div>
+					</form>
+			</div>
+	</section>
+
+	{% if error %}
+		<section id="results" class="results-error">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12 text-center">
+						<h2>Results</h2>
+						<hr class="star-primary">
+					</div>
+				</div>
+				<div class="row">
+					<div class="alert alert-danger" role="alert">{{ error }}</div>
+				</div>
+			</div>
+		</section>
+	{% endif %}
+
+	{% if word_counts %}
+
+		<section id="results">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12 text-center">
+						<h2>Results</h2>
+						<hr class="star-primary">
+					</div>
+				</div>
+				<div class="row">
+
+					<div class="col-sm-4" id="wordFreq">
+						<h4>Top Words 
+							<a href="/download-csv/{{ csv_file_names['words'] }}" title="Download"><span class="glyphicon glyphicon-download" aria-hidden="true"></span></a>
+						</h4>
+						<table class="table table-striped">
+							<tr><th>Frequency</th><th>Word</th></tr>
+							{% for word in word_counts %}
+								<tr><td>{{ word[1] }}</td><td>{{ word[0] }}</td></tr>
+							{% endfor %}
+						</table>
+					</div>
+
+					<div class="col-sm-4" id="biGrams">
+						<h4>Top 2-Word Phrases 
+							<a href="/download-csv/{{ csv_file_names['bigrams'] }}" title="Download"><span class="glyphicon glyphicon-download" aria-hidden="true"></span></a>
+						</h4>
+						<table class="table table-striped">
+							<tr><th>Frequency</th><th>Phrase</th></tr>
+							{% for bigram in bigram_counts %}
+								<tr><td>{{ bigram[1] }}</td><td>{{ " ".join(bigram[0]) }}</td></tr>
+							{% endfor %}
+						</table>
+					</div>
+
+					<div class="col-sm-4" id="triGrams">
+						<h4>Top 3-Word Phrases
+							<a href="/download-csv/{{ csv_file_names['trigrams'] }}" title="Download"><span class="glyphicon glyphicon-download" aria-hidden="true"></span></a>
+						</h4>
+						<table class="table table-striped">
+							<tr><th>Frequency</th><th>Phrase</th></tr>
+							{% for trigram in trigram_counts %}
+								<tr><td>{{ trigram[1] }}</td><td>{{ " ".join(trigram[0]) }}</td></tr>
+							{% endfor %}
+						</table>
+					</div>
+				</div>
+			</div>
+		</section>
+
+	{% endif %}
+
+{% endblock %}
+
+{% block page_scripts %}
+<script type="text/javascript">
+//Javascript
+</script>
+{% endblock %}
