@@ -75,7 +75,7 @@ class WTFCSVStat():
                 column_info['type'] = 'empty'
                 continue
                 
-            column_info['type'] = c.type
+            column_info['type'] = c.type.__name__
             column_info['nulls'] = stats['nulls']
 
             if len(stats['unique']) <= MAX_UNIQUE and c.type is not bool:
@@ -99,6 +99,7 @@ class WTFCSVStat():
                     column_info['max_str_len'] = stats['len']
 
             results['columns'].append( column_info )
+        return results
 
     def get_min(self, c, values, stats):
         if c.type == NoneType:
@@ -201,7 +202,9 @@ def freq(l, n=MAX_FREQ):
     return top
 
 if __name__ == "__main__":
+    if(len(sys.argv)!=2):
+        print("You must pass in a csv file to parse!")
+        sys.exit(1)
     wtfcsvstat = WTFCSVStat(sys.argv[1])
     results = wtfcsvstat.get_summary()
-    json.dumps(results)
-    
+    print(results)
