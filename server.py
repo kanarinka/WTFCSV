@@ -11,13 +11,15 @@ app = Flask(__name__)
 
 app.config['UPLOADED_DOCS_DEST'] = TEMP_DIR
 
-docs = UploadSet('docs', TEXT)
+#TODO accept ZIP files later on
+docs = UploadSet(name='docs', extensions=('csv'))
+
 configure_uploads(app, (docs,))
 patch_request_class(app, 4 * 1024 * 1024)	# 4MB
 
 # setup logging
 base_dir = os.path.dirname(os.path.abspath(__file__))
-logging.basicConfig(filename=os.path.join(base_dir,'wtfcsv.log'),level=logging.WARN)
+logging.basicConfig(filename=os.path.join(base_dir,'wtfcsv.log'),level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 logger.info("Temp Dir is %s" % TEMP_DIR)
@@ -57,7 +59,10 @@ def from_url():
 		url = request.form['csvURL']
 		logger.debug("Reading data from url (%s)" % url)
 		testfile = urllib.URLopener()
+		#CATHERINE WILL FIX -- NEED TO GET HEADER AND GET ENCODING TO MAKE LINKING WORK
+		
 		testfile.retrieve(url, filepath)
+		
 		logger.debug("  Reading data from file (%s)" % filepath)
 		results = wtfcsvstat.get_summary(filepath)
 		os.remove(filepath)		# privacy: don't keep the file around
