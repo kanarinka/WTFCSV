@@ -1,17 +1,20 @@
 import os, sys, time, json, logging, csv, string, tempfile, codecs, re, urllib, codecs
 from operator import itemgetter
-from flask import Flask, Response, render_template, jsonify, request, redirect, url_for, abort
+from flask import Flask, Response, render_template, jsonify, request, redirect, url_for, abort, g
 from flask.ext.uploads import UploadSet, configure_uploads, TEXT, patch_request_class, UploadNotAllowed
+import requests
 import unicodecsv
 import wtfcsvstat
+from flask.ext.babel import Babel
+
 
 TEMP_DIR = tempfile.gettempdir()
 
 app = Flask(__name__)
+babel = Babel(app)
 
 app.config['UPLOADED_DOCS_DEST'] = TEMP_DIR
 
-#TODO accept ZIP files later on
 docs = UploadSet(name='docs', extensions=('csv'))
 
 configure_uploads(app, (docs,))
@@ -24,11 +27,28 @@ logger = logging.getLogger(__name__)
 
 logger.info("Temp Dir is %s" % TEMP_DIR)
 
-@app.route("/",methods=['GET'])
+@app.before_request
+def before():
+	if request.view_args and 'lang_code' in request.view_args:
+		if request.view_args['lang_code'] not in ('es', 'en'):
+			return abort(404) # bail on invalid language
+		g.current_lang = request.view_args['lang_code']
+		request.view_args.pop('lang_code')
+
+@babel.localeselector
+def get_locale():
+		return g.get('current_lang', 'en')
+	    
+@app.route('/')
+def root():
+	# default to english
+	return redirect(url_for('index', lang_code='en'))
+	    
+@app.route("/<lang_code>/",methods=['GET'])
 def index():
 	return render_template("home.html", error=None, csv_info=None, tab='paste')
 
-@app.route("/from-text",methods=['POST'])
+@app.route("/<lang_code>/from-text",methods=['POST'])
 def from_text():
 	error = None
 	results = None
@@ -48,7 +68,7 @@ def from_text():
 		logger.exception(e)
 	return render_template("home.html", error=error, csv_info=results, tab='paste')
 	
-@app.route("/from-url",methods=['POST'])
+@app.route("/<lang_code>/from-url",methods=['POST'])
 def from_url():
 	error = None
 	results = None
@@ -58,20 +78,22 @@ def from_url():
 		# grab content
 		url = request.form['csvURL']
 		logger.debug("Reading data from url (%s)" % url)
+		r = requests.get(url)
+	 	
+	 	logger.debug("encoding is %s" % r.encoding)
+	 	
 		testfile = urllib.URLopener()
-		#CATHERINE WILL FIX -- NEED TO GET HEADER AND GET ENCODING TO MAKE LINKING WORK
-		
 		testfile.retrieve(url, filepath)
 		
 		logger.debug("  Reading data from file (%s)" % filepath)
-		results = wtfcsvstat.get_summary(filepath)
+		results = wtfcsvstat.get_summary(filepath, encoding=r.encoding)
 		os.remove(filepath)		# privacy: don't keep the file around
 	except Exception as e:
 		error = "Sorry, we weren't able to retrieve that url"
 		logger.exception(e)
 	return render_template("home.html", error=error, csv_info=results, tab='link-file')
-
-@app.route("/from-file",methods=['POST'])
+    
+@app.route("/<lang_code>/from-file",methods=['POST'])
 def from_file():
 	error = None
 	results = None

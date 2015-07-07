@@ -5,8 +5,9 @@ import bz2
 from heapq import nlargest
 from operator import itemgetter
 import math
-
+import logging
 import six
+import codecs
 
 from csvkit import CSVKitReader, table
 from lazyfile import LazyFile
@@ -16,6 +17,12 @@ NoneType = type(None)
 MAX_UNIQUE = 5
 MAX_FREQ = 5
 OPERATIONS =('min', 'max', 'sum', 'mean', 'median', 'stdev', 'nulls', 'unique', 'freq', 'len')
+
+# setup logging
+base_dir = os.path.dirname(os.path.abspath(__file__))
+logging.basicConfig(filename=os.path.join(base_dir,'wtfcsv.log'),level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+
 
 '''
 Public API: call this to get results!
@@ -33,24 +40,19 @@ class WTFCSVStat():
     def __init__(self, input_path, has_header_row=True, encoding='utf-8'):
         self.has_header_row = has_header_row
         self.input_file = self._open_input_file(input_path, encoding)
+        
     
     # copied from CSVKitUtility
-    def _open_input_file(self, path, encoding):
+    def _open_input_file(self, path, enc):
+        logger.debug(" ENCODING in _open_input_file %s " % enc)
         if six.PY2:
             mode = 'rb'
-            kwargs = {}
         else:
             mode = 'rt'
-            kwargs = { 'encoding': encoding }
 
         (_, extension) = os.path.splitext(path)
 
-        if extension == u'.gz':
-            f = LazyFile(gzip.open, path, mode, **kwargs)
-        elif extension == '.bz2':
-            f = LazyFile(bz2.BZ2File, path, mode, **kwargs)
-        else:
-            f = LazyFile(open, path, mode, **kwargs)
+        f = codecs.open(path, mode, encoding=enc)
 
         return f
 
