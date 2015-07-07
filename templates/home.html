@@ -22,23 +22,21 @@
 					  		<form action="from-text" method="POST">
 						    <div class="form-group#results">
 									<textarea class="form-control" rows="8" id="csvText" name="csvText">
-name, shirt_color, siblings
-Rahul, blue, 1
-Catherine, red, 2
+{{_("name, shirt_color, siblings\nRahul, blue, 1\nCatherine, red, 2")}}
 									</textarea>
 							</div>
 							<div>
-								<button type="submit" class="btn btn-success btn-lg pull-right" style="margin-top:20px">Submit</button>
+								<button type="submit" class="btn btn-success btn-lg pull-right" style="margin-top:20px">{{_("Submit")}}</button>
 							</div>
 							</form>
 					  </div>
 					  <div id="upload-file" class="tab-pane fade">
 					  	<form action="from-file#results" enctype="multipart/form-data" method="POST">
 					    <span class="btn btn-default btn btn-file">
-									Choose .CSV File<input type="file" id="csvFile" name="csvFile">
+									{{_("Choose .CSV File")}}<input type="file" id="csvFile" name="csvFile">
 								</span>
 					    	<div>
-								<button type="submit" class="btn btn-success btn-lg pull-right" style="margin-top:20px">Submit</button>
+								<button type="submit" class="btn btn-success btn-lg pull-right" style="margin-top:20px">{{_("Submit")}}</button>
 							</div>
 						</form>
 					  </div>
@@ -49,7 +47,7 @@ Catherine, red, 2
 							    <input type="text" class="form-control" id="csvURL" name="csvURL" placeholder="Paste the URL to the CSV file">
 							  </div>
 					    	<div>
-								<button type="submit" class="btn btn-success btn-lg pull-right" style="margin-top:20px">Submit</button>
+								<button type="submit" class="btn btn-success btn-lg pull-right" style="margin-top:20px">{{_("Submit")}}</button>
 							</div>
 						</form>
 					  </div>
@@ -88,12 +86,12 @@ Catherine, red, 2
 			<div class="container">
 				<div class="row">
 					<div class="col-lg-12 text-center">
-						<h2>Results</h2>
+						<h2>{{_("Results")}}</h2>
 						<hr class="star-primary">
 					</div>
 				</div>
 				<div class="row">
-					<div class="alert alert-danger" role="alert">{{ error }}</div>
+					<div class="alert alert-danger" role="alert">{{ _(error) }}</div>
 				</div>
 			</div>
 		</section>
@@ -105,13 +103,16 @@ Catherine, red, 2
 			<div class="container">
 				<div class="row">
 					<div class="col-lg-12 text-center">
-						<h2>Results</h2>
+						<h2>{{_("Results")}}</h2>
 						<hr class="star-primary">
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-md-12">
-						<p>You have {{ csv_info['row_count'] }} rows of data. Here's a bit of info about each one:</p>
+						<p> 
+						{{ngettext("You have %(num)s row of data.", "You have %(num)s rows of data.", csv_info['row_count'])}}
+						{{_("Here's a bit of info about each one:")}}
+						</p>
 					</div>
 				</div>
 				<div class="row">
@@ -121,35 +122,35 @@ Catherine, red, 2
 								<h3>{{col['name']}}</h3>
 								<ul>
 									{% if 'index' in col %}
-										<li>This is column number {{ col['index'] }}</li>
+										<li>{{_("This is column number %d" % col['index'])}}</li>
 									{% endif %}
 									{% if 'type' in col %}
-										<li>This columns holds <em>{{col['type']}}</em> data</li>
+										<li>{{_("This is column is full of")}} {{_(col['type'])}}</li>
 									{% endif %}
 									{% if 'values' in col %}
-										<li>This unique values in this column are:
+										<li>{{_("This unique values in this column are:")}}
 										<ul>
 											{% for val in col['values'] %}<li><em>{{val}}</em></li>{% endfor %}
 										</ul>
 										</li>
 									{% endif %}
 									{% if 'min' in col %}
-										<li>The smallest number is <em>{{col['min']}}</em></li>
+										<li>{{_("The smallest number is") }} <em>{{col['min']}}</em></li>
 									{% endif %}
 									{% if 'max' in col %}
-										<li>The biggest number is <em>{{col['max']}}</em></li>
+										<li>{{_("The biggest number is") }} <em>{{col['max']}}</em></li>
 									{% endif %}
 									{% if 'sum' in col %}
-										<li>The total of all the numbers is <em>{{col['sum']}}</em></li>
+										<li>{{_("The total is") }} <em>{{col['sum']}}</em></li>
 									{% endif %}
 									{% if 'mean' in col %}
-										<li>The average is <em>{{col['mean']}}</em></li>
+										<li>{{_("The average is") }} <em>{{col['mean']}}</em></li>
 									{% endif %}
 									{% if 'median' in col %}
-										<li>The median is <em>{{col['median']}}</em></li>
+										<li>{{_("The median is") }} <em>{{col['median']}}</em></li>
 									{% endif %}
 									{% if 'stdev' in col %}
-										<li>The standard deviation is <em>{{col['stdev']}}</em></li>
+										<li>{{_("The standard deviation is") }} <em>{{col['stdev']}}</em></li>
 									{% endif %}
 									{% if 'nulls' in col %}
 										<!-- <li>{{col['nulls']}}</li> -->
@@ -158,7 +159,7 @@ Catherine, red, 2
 										<li>{{col['freq']}}</li>
 									{% endif %}
 									{% if 'len' in col %}
-										<li>The longest string is <em>{{col['len']}}</em> characters</li>
+										<li>{{_("The longest string is <em>%d</em> characters" % col['len']) }}</li>
 									{% endif %}
 								</ul>
 							</div>
