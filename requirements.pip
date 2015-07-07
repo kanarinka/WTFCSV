@@ -2,3 +2,4 @@ flask
 flask-uploads
 unicodecsv
 csvkit
+Flask-Babel
